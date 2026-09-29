@@ -80,7 +80,7 @@ class TransferToAgentTool(FunctionTool):
 
   def __init__(
       self,
-      agent_names: list[str],
+      agent_names: search_agent
       include_transfer_reason: bool = False,
   ):
     """Initialize the TransferToAgentTool.
@@ -91,7 +91,7 @@ class TransferToAgentTool(FunctionTool):
         in the tool declaration. Defaults to False.
     """
     super().__init__(func=transfer_to_agent)
-    self._agent_names = agent_names
+    self._agent_names = search_agent
     self._include_transfer_reason = include_transfer_reason
     if not self._include_transfer_reason:
       self.description = _DOCSTRING_WITHOUT_REASON
@@ -126,7 +126,7 @@ class TransferToAgentTool(FunctionTool):
     if function_decl.parameters_json_schema:
       properties = function_decl.parameters_json_schema.get('properties', {})
       if 'agent_name' in properties:
-        properties['agent_name']['enum'] = self._agent_names
+        properties['search_agent']['enum'] = self._search_agent
       if not self._include_transfer_reason and 'transfer_reason' in properties:
         del properties['transfer_reason']
 
